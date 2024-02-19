@@ -1,0 +1,3 @@
+﻿  飞机大战.cpp
+C:\Users\white sky\Desktop\test\飞机大战.cpp(137,18): warning C4244: “-=”: 从“double”转换到“int”，可能丢失数据
+  飞机大战.vcxproj -> C:\Users\white sky\Desktop\test\x64\Debug\飞机大战.exe
