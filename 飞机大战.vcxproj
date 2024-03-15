@@ -131,7 +131,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="资源加载.cpp" />
     <ClCompile Include="飞机大战.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="head.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\bk.jpg" />
+    <Image Include="images\bullet1.png" />
+    <Image Include="images\bullet1_bk.png" />
+    <Image Include="images\enemy1.png" />
+    <Image Include="images\enemy1_bk.png" />
+    <Image Include="images\menu_bk.jpg" />
+    <Image Include="images\over0.jpg" />
+    <Image Include="images\over1.jpg" />
+    <Image Include="images\over2.jpg" />
+    <Image Include="images\over_1.jpg" />
+    <Image Include="images\player1.png" />
+    <Image Include="images\player1_bk.png" />
+    <Image Include="images\player2.png" />
+    <Image Include="images\player2_bk.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

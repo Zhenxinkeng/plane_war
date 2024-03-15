@@ -13,10 +13,65 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="资源文件\images">
+      <UniqueIdentifier>{d96f5608-9dc7-455e-867f-04bf5275a665}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="飞机大战.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="资源加载.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="head.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\bk.jpg">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\bullet1.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\bullet1_bk.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\enemy1.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\enemy1_bk.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\menu_bk.jpg">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\over_1.jpg">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\over0.jpg">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\over1.jpg">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\over2.jpg">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\player1.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\player1_bk.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\player2.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
+    <Image Include="images\player2_bk.png">
+      <Filter>资源文件\images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

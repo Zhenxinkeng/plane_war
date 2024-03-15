@@ -1,108 +1,117 @@
-﻿#include<stdio.h>
-#include<iostream>
-#include <graphics.h>
-#include <conio.h>
-#include<string>
-#include <Windows.h>
-#include <mmsystem.h>
-#pragma comment(lib, "winmm.lib")
+﻿#include "head.h"
 
-enum My
-{
-	WIDTH = 1138,//背景宽
-	HEIGHT = 600,//背景高
-	BULLET_NUM = 15,//子弹数目
-	ENEMY_NUM=15,//敌机数目
-	MAX_PLAYER_HP = 100, // 最大玩家血量
-	MAX_ENEMY_HP = 50     // 最大敌机血量
-};
+int score = 0;//单人计分
+int model = 0;//模式选择
+int winner = -1;//赢家
 
-DWORD time_start, time_last;//定义时间变量
-int score = 0;
+DWORD time_start, time_last;//用于子弹创建
+DWORD time_start1, time_last1;//用于玩家二的子弹创建
+DWORD time_start2, time_last2;//用于敌机创建
 
-//定义图片变量
+IMAGE img_menu_bk;//菜单背景图
 IMAGE img_bk;//背景图
-IMAGE img_player;//玩家图
+IMAGE img_player1;//玩家一图
+IMAGE img_player1_bk;//玩家一掩码图
+IMAGE img_player2;//玩家二图
+IMAGE img_player2_bk;//玩家二掩码图
 IMAGE img_bullet1;//子弹图
-IMAGE img_enemy;//敌机图
+IMAGE img_bullet1_bk;//子弹掩码图
+IMAGE img_enemy1;//敌机图
+IMAGE img_enemy1_bk;//敌机掩码图
+IMAGE img_over_1;//死了
+IMAGE img_over0;//赢了
+IMAGE img_over1;//玩家一赢了
+IMAGE img_over2;//玩家二赢了
 
-struct Plane {
-	int x;
-	int y;
-	int hp;
-	bool life;//是不是还活着
-}player, bull[BULLET_NUM], enemy[ENEMY_NUM];
-
-void dataInit();//数据初始化
-void load_image();//图片加载
-void load_audio();//音频加载
-void creat_bullet();//子弹创建
-void bullet_move();//子弹移动
-void creat_enemy();//敌机创建
-void enemy_move();//敌机移动
-void playermove(int speed);//角色行动
-void  check_collision();//敌我碰撞
-void draw_hp(int hp);//打印剩余血量
-void game_draw();//画面呈现
-void game_start();//开始游戏
-void bullet_enemy_collision();//子弹与敌机碰撞
-void game_victory();//游戏胜利
-void game_over();//游戏失败
+member player1,player2, bull1[BULLET_NUM], bull2[BULLET_NUM], enemy1[ENEMY_NUM];//定义玩家，子弹，敌机结构体数组
 
 //--------------------------------------------------------------------------------- 数据初始化
 void dataInit() {
 	//玩家初始化
-	player.x = 0;
-	player.y = 250;
-	player.life = true;
-	player.hp = MAX_PLAYER_HP;
+	player1.x = 0;
+	player1.y = 250;
+	player1.life = true;
+	player1.hp = MAX_PLAYER_HP;
+	//玩家二初始化
+	player2.x = 1100;
+	player2.y = 250;
+	player2.life = true;
+	player2.hp = MAX_PLAYER_HP;
 	//子弹初始化
 	for (int i = 0; i < BULLET_NUM; i++) {
-		bull[i].x = player.x + 30;
-		bull[i].y = player.y;
-		bull[i].life = false;
+		bull1[i].x = player1.x + 30;
+		bull1[i].y = player1.y;
+		bull1[i].life = false;
+	}
+	//子弹二初始化
+	for (int i = 0; i < BULLET_NUM; i++) {
+		bull2[i].x = player1.x - 30;
+		bull2[i].y = player1.y;
+		bull2[i].life = false;
 	}
 	//敌机初始化
 	for (int i = 0; i < ENEMY_NUM; i++) {
-		enemy[i].life = false;
-		enemy[i].hp = MAX_ENEMY_HP;
+		enemy1[i].life = false;
+		enemy1[i].hp = MAX_ENEMY_HP;
 	}
 	//时间初始化
 	time_start = time_last = GetTickCount();
+	time_start1 = time_last1 = GetTickCount();
+	time_start2 = time_last2 = GetTickCount();
 }
 
 //--------------------------------------------------------------------------------- 图片加载
 void load_image() {
 	loadimage(&img_bk, "./images/bk.jpg");
-	loadimage(&img_player, "./images/player.png");
-	loadimage(&img_bullet1, "./images/bullet1.jpg");
-	loadimage(&img_enemy, "./images/enemy.png");
+	loadimage(&img_player1, "./images/player1.png");
+	loadimage(&img_player1_bk, "./images/player1_bk.png");
+	loadimage(&img_player2, "./images/player2.png");
+	loadimage(&img_player2_bk, "./images/player2_bk.png");
+	loadimage(&img_bullet1, "./images/bullet1.png");
+	loadimage(&img_bullet1_bk, "./images/bullet1_bk.png");
+	loadimage(&img_enemy1, "./images/enemy1.png");
+	loadimage(&img_enemy1_bk, "./images/enemy1_bk.png");
 }
 
-//--------------------------------------------------------------------------------- 音频加载
-void load_audio() {
-	PlaySound(TEXT("./music/click.wav"), NULL, SND_FILENAME);
-}
-
-//--------------------------------------------------------------------------------- 子弹创建
+//--------------------------------------------------------------------------------  玩家一的子弹创建
 void creat_bullet() {
 	for (int i = 0; i < BULLET_NUM; i++) {
-		if (!bull[i].life) {
-			bull[i].x = player.x + 30;
-			bull[i].y = player.y;
-			bull[i].life = true;
+		if (!bull1[i].life) {
+			bull1[i].x = player1.x + 30;
+			bull1[i].y = player1.y;
+			bull1[i].life = true;
 			break;
 		}
 	}
 }
 
+//--------------------------------------------------------------------------------  玩家二的子弹创建
+void creat_bullet2() {
+	for (int i = 0; i < BULLET_NUM; i++) {
+		if (!bull2[i].life) {
+			bull2[i].x = player2.x - 30;
+			bull2[i].y = player2.y;
+			bull2[i].life = true;
+			break;
+		}
+	}
+}
 //--------------------------------------------------------------------------------- 子弹移动
 void bullet_move() {
 	for (int i = 0; i < BULLET_NUM; i++) {
-		if (bull[i].life) {
-			bull[i].x++;
-			if (bull[i].x > 1138) {
-				bull[i].life = false;
+		if (bull1[i].life) {
+			bull1[i].x++;
+			if (bull1[i].x > 1138) {
+				bull1[i].life = false;
+			}
+			else {
+				bullet_enemy_collision();
+			}
+		}
+		if (bull2[i].life) {
+			bull2[i].x--;
+			if (bull2[i].x <=0) {
+				bull2[i].life = false;
 			}
 			else {
 				bullet_enemy_collision();
@@ -115,16 +124,16 @@ void bullet_move() {
 void creat_enemy() {
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		if (!enemy[i].life&& time_last - time_start > 400)
+		if (!enemy1[i].life&& time_last2 - time_start2 > 400)
 		{
-			enemy[i].life = true;
-			enemy[i].x = 1138;
-			enemy[i].y = rand()%600;
-			enemy[i].hp = MAX_ENEMY_HP;
-			time_start = time_last;
+			enemy1[i].life = true;
+			enemy1[i].x = 1138;
+			enemy1[i].y = rand()%600;
+			enemy1[i].hp = MAX_ENEMY_HP;
+			time_start2 = time_last2;
 			break;//每次一个
 		}
-		time_last = GetTickCount();
+		time_last2 = GetTickCount();
 	}
 }
 
@@ -132,17 +141,19 @@ void creat_enemy() {
 void enemy_move() {
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		if (enemy[i].life)
+		if (enemy1[i].life)
 		{
-			enemy[i].x -= 0.3;
-			if (enemy[i].x < 10)
-				enemy[i].life = false;
+			enemy1[i].x -= 0.3;
+			if (enemy1[i].x <= 0) {
+				enemy1[i].life = false;
+				enemy1[i].hp = MAX_ENEMY_HP;
+			}
 		}
 	}
 }
 
-//--------------------------------------------------------------------------------- 角色行动
-void playermove(int speed) {
+//--------------------------------------------------------------------------------- 角色操作
+void player_action(int speed) {
 	//玩家移动
 #if 0 
 	if (_kbhit()) {
@@ -155,207 +166,254 @@ void playermove(int speed) {
 		}
 	}
 #elif 1
-	if (GetAsyncKeyState(VK_UP) && player.y > -22) {
-		player.y -= speed;
+	if (GetAsyncKeyState(VK_UP) && player1.y > -22) {
+		player1.y -= speed;
 	}
-	if (GetAsyncKeyState(VK_DOWN) && player.y < HEIGHT - 22) {
-		player.y += speed;
+	if (GetAsyncKeyState(VK_DOWN) && player1.y < HEIGHT - 22) {
+		player1.y += speed;
 	}
-	if (GetAsyncKeyState(VK_LEFT) && player.x > 0) {
-		player.x -= speed;
+	if (GetAsyncKeyState(VK_LEFT) && player1.x > 0) {
+		player1.x -= speed;
 	}
-	if (GetAsyncKeyState(VK_RIGHT) && player.x < WIDTH) {
-		player.x += speed;
+	if (GetAsyncKeyState(VK_RIGHT) && player1.x < WIDTH) {
+		player1.x += speed;
 	}
 #endif
+	//玩家二移动
+	if (GetAsyncKeyState('W') && player2.y > -22) {
+		player2.y -= speed;
+	}
+	if (GetAsyncKeyState('S') && player2.y < HEIGHT - 22) {
+		player2.y += speed;
+	}
+	if (GetAsyncKeyState('A') && player2.x > 0) {
+		player2.x -= speed;
+	}
+	if (GetAsyncKeyState('D') && player2.x < WIDTH) {
+		player2.x += speed;
+	}
 	//空格发射子弹
-	if (GetAsyncKeyState(VK_SPACE) && time_last - time_start > 160) {
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && time_last - time_start > 160) {
 		creat_bullet();
 		time_start = time_last;
 	}
 	time_last = GetTickCount();
+	if (GetAsyncKeyState('J') && time_last1 - time_start1 > 160) {
+		creat_bullet2();
+		time_start1 = time_last1;
+	}
+	time_last1 = GetTickCount();
 }
 
 //--------------------------------------------------------------------------------- 敌我碰撞
 void check_collision()
 {
-	// 玩家和敌机的碰撞检测
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		if (enemy[i].life && player.life)
+		if (enemy1[i].life && player1.life)
 		{
-			if (player.x < enemy[i].x + 50 && player.x + 50 > enemy[i].x &&
-				player.y < enemy[i].y + 50 && player.y + 50 > enemy[i].y)
+			if (player1.x < enemy1[i].x + 78 && player1.x + 30 > enemy1[i].x &&
+				player1.y < enemy1[i].y + 52 && player1.y +44  > enemy1[i].y)
 			{
-				// 玩家和敌机发生碰撞，玩家掉血
-				player.hp -= 10;
-				if (player.hp <= 0)
+				player1.hp -= 10;
+				if (player1.hp <= 0)
 				{
-					player.life = false;
-					player.hp = 0; // 确保血量不会为负数
+					player1.life = false;
+					player1.hp = 0; 
 				}
-				enemy[i].life = false;
-				enemy[i].hp = MAX_ENEMY_HP; // 重置敌机血量
+				enemy1[i].life = false;
+				enemy1[i].hp = MAX_ENEMY_HP; 
 			}
 		}
 	}
 }
 
-//--------------------------------------------------------------------------------- 子弹与敌机碰撞
+//--------------------------------------------------------------------------------- 敌弹碰撞
 void bullet_enemy_collision() {
 	for (int i = 0; i < BULLET_NUM; i++) {
-		if (bull[i].life) {
+		if (bull1[i].life) {
 			for (int j = 0; j < ENEMY_NUM; j++) {
-				if (enemy[j].life && bull[i].x < enemy[j].x + 50 && bull[i].x + 10 > enemy[j].x &&
-					bull[i].y < enemy[j].y + 50 && bull[i].y + 10 > enemy[j].y) {
-					// 子弹击中敌机，减少敌机血量
-					enemy[j].hp -= 20;
-					if (enemy[j].hp <= 0) {
+				if (enemy1[j].life && bull1[i].x < enemy1[j].x + 50 && bull1[i].x + 10 > enemy1[j].x &&
+					bull1[i].y < enemy1[j].y + 50 && bull1[i].y + 10 > enemy1[j].y) {
+					enemy1[j].hp -= 20;
+					if (enemy1[j].hp <= 0) {
 						score++;
-						enemy[j].life = false;
-						enemy[j].hp = 0; // 确保血量不为负数
+						enemy1[j].life = false;
+						enemy1[j].hp = 0; 
 					}
-					bull[i].life = false;
-					break; // 一个子弹只能击中一个敌机
+					bull1[i].life = false;
+					break; 
+				}
+				if (bull1[i].x < player2.x + 71 && bull1[i].x + 10 > player2.x &&
+					bull1[i].y < player2.y + 44 && bull1[i].y + 10 > player2.y) {
+					player2.hp -= 10;
+					bull1[i].life = false;
+					break;
+				}
+			}
+		}
+		if (bull2[i].life) {
+			for (int j = 0; j < ENEMY_NUM; j++) {
+				if (bull2[i].x < player1.x + 30 && bull2[i].x + 10 > player1.x &&
+					bull2[i].y < player1.y + 44 && bull2[i].y + 10 > player1.y) {
+					player1.hp -= 10;
+					bull2[i].life = false;
+					break;
 				}
 			}
 		}
 	}
 }
 
-//--------------------------------------------------------------------------------- 打印剩余血量
-void draw_hp(int hp) {
+//--------------------------------------------------------------------------------- 打印血量和分数
+void draw_hp() {
 	settextstyle(20, 0, _T("微软雅黑"));
 	settextcolor(WHITE);
 	setbkmode(TRANSPARENT);
-	outtextxy(10, 10, "HP: ");//显示字符串
-	outtextxy(50, 10, std::to_string(hp).c_str());//显示整数
-	outtextxy(WIDTH - 100, 10, ("Score: " + std::to_string(score)).c_str());//显示分数
+	outtextxy(10, 10, ("HP: " + to_string(player1.hp)).c_str());
+	if(model==1) 
+		outtextxy(WIDTH - 100, 10, ("HP: " + to_string(player2.hp)).c_str());
+	else
+		outtextxy(WIDTH - 100, 10, ("Score: " + to_string(score)).c_str());
 }
 
 //--------------------------------------------------------------------------------- 画面呈现
 void game_draw() {
 	load_image();
 	BeginBatchDraw();//双缓冲绘图，防闪烁
-	//打印背景图
 	putimage(0, 0, &img_bk);
-	//打印玩家
-	if (player.life) { 
-		putimage(player.x, player.y, &img_player); 
+	if (player1.life) { 
+		putimage(player1.x, player1.y, &img_player1,SRCAND);
+		putimage(player1.x, player1.y, &img_player1_bk,SRCPAINT);
 	}
-	//打印子弹
 	for (int i = 0; i < BULLET_NUM; i++) {
-		if (bull[i].life) {
-			putimage(bull[i].x, bull[i].y, &img_bullet1);
+		if (bull1[i].life) {
+			putimage(bull1[i].x, bull1[i].y, &img_bullet1, SRCAND);
+			putimage(bull1[i].x, bull1[i].y, &img_bullet1_bk, SRCPAINT);
 		}
 	}
-	bullet_move();
-	//打印敌机
-	creat_enemy();
+	if (model == 1) {
+		if (player2.life) {
+			putimage(player2.x, player2.y, &img_player2, SRCAND);
+			putimage(player2.x, player2.y, &img_player2_bk, SRCPAINT);
+		}
+		for (int i = 0; i < BULLET_NUM; i++) {
+			if (bull2[i].life) {
+				putimage(bull2[i].x, bull2[i].y, &img_bullet1, SRCAND);
+				putimage(bull2[i].x, bull2[i].y, &img_bullet1_bk, SRCPAINT);
+			}
+		}
+	}
 	for (int i = 0; i < ENEMY_NUM; i++) {
-		if (enemy[i].life) {
-			putimage(enemy[i].x, enemy[i].y, &img_enemy);
+		if (enemy1[i].life) {
+			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1, SRCAND);
+			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1_bk, SRCPAINT);
 		}
 	}
-	enemy_move();
-	//打印剩余血量
-	draw_hp(player.hp);
+	draw_hp();
 	EndBatchDraw();
-	check_collision();
+}
+
+//--------------------------------------------------------------------------------- 菜单
+void game_begin() {
+	loadimage(&img_menu_bk, "./images/menu_bk.jpg");
+	putimage(0, 0, &img_menu_bk); 
+	while (1) {
+		MOUSEMSG m;
+		m = GetMouseMsg();
+		if (m.uMsg == WM_LBUTTONDOWN && m.x >= 530 && m.x <= 675 && m.y >= 165 && m.y <= 210) {
+			break;
+		}
+		else if (m.uMsg == WM_LBUTTONDOWN && m.x >= 530 && m.x <= 675 && m.y >= 235 && m.y <= 280) {
+			model = 1; break;
+		}
+		else if (m.uMsg == WM_LBUTTONDOWN && m.x >= 530 && m.x <= 675 && m.y >= 305 && m.y <= 350) {
+			setbkmode(TRANSPARENT);
+			outtextxy(150, 170, "玩家一：上下左右 空格射击"); 
+			outtextxy(150, 200, "玩家二：WSAD J射击");
+		}
+		else if (m.uMsg == WM_LBUTTONDOWN && m.x >= 530 && m.x <= 675 && m.y >= 440 && m.y <= 490) {
+			setbkmode(TRANSPARENT);
+			outtextxy(150, 400, "制作人：@真心坑@"); 
+		}
+	}
 }
 
 //--------------------------------------------------------------------------------- 开始游戏
 void game_start() {
 	dataInit();
 	PlaySound(TEXT("./music/sky.wav"), NULL, SND_FILENAME | SND_ASYNC);
-	while (1) {
-		game_draw();
-		playermove(2);
-		if (score >= 20 || player.hp == 0) break;
+	if (model == 0) {
+		while (1) {
+			creat_enemy();
+			enemy_move();
+			player_action(SPEED);
+			bullet_move();
+			game_draw();
+			check_collision();
+			if (score >= 20) {
+				winner = 0;
+				break;
+			}
+			else if(player1.hp<=0) 
+				break;
+		}
+	}
+	else {
+		while (1) {
+			player_action(SPEED);
+			bullet_move();
+			game_draw();
+			check_collision();
+			if (player1.hp==0) {
+				winner = 2;
+				break;
+			}
+			else if(player2.hp==0){
+				winner = 1;
+				break;
+			}
+		}
 	}
 }
 
 //--------------------------------------------------------------------------------- 游戏胜利
 void game_victory() {
-	PlaySound(TEXT("./music/victory.wav"), NULL, SND_FILENAME | SND_ASYNC);
-	bool flas= true;
-	DWORD last_flash_tim = GetTickCount();
-	DWORD flash_interva = 300;
-	while (1) {
-		if (GetTickCount() - last_flash_tim >= flash_interva) {
-			last_flash_tim = GetTickCount();
-			if (flas) {
-				settextstyle(40, 0, _T("宋体")); // 设置文本样式
-				settextcolor(GREEN); // 设置文本颜色
-				outtextxy(395, 265, _T("你赢了")); // 点击开始游戏
-				flas = false;
-			}
-			else {
-				settextstyle(40, 0, _T("宋体")); // 设置文本样式
-				settextcolor(BLACK); // 设置文本颜色
-				outtextxy(395, 265, _T("你赢了")); // 点击开始游戏
-				flas = true;
-			}
-		}
-	}
+	loadimage(&img_over0, "./images/over0.jpg");
+	putimage(0, 0, &img_over0);
 }
-
 //--------------------------------------------------------------------------------- 游戏失败
-void game_over() {
-	PlaySound(TEXT("./music/victory.wav"), NULL, SND_FILENAME | SND_ASYNC);
-	bool flas = true;
-	DWORD last_flash_tim = GetTickCount();
-	DWORD flash_interva = 300;
-	while (1) {
-		if (GetTickCount() - last_flash_tim >= flash_interva) {
-			last_flash_tim = GetTickCount();
-			if (flas) {
-				settextstyle(40, 0, _T("宋体")); // 设置文本样式
-				settextcolor(GREEN); // 设置文本颜色
-				outtextxy(395, 265, _T("你死了")); // 点击开始游戏
-				flas = false;
-			}
-			else {
-				settextstyle(40, 0, _T("宋体")); // 设置文本样式
-				settextcolor(BLACK); // 设置文本颜色
-				outtextxy(395, 265, _T("你死了")); // 点击开始游戏
-				flas = true;
-			}
-		}
-	}
+void game_failure() {
+	loadimage(&img_over_1, "./images/over-1.jpg");
+	putimage(0, 0, &img_over_1);
+}
+//--------------------------------------------------------------------------------- 玩家一胜利
+void game_win1() {
+	loadimage(&img_over1, "./images/over1.jpg");
+	putimage(0, 0, &img_over1);
+}
+//--------------------------------------------------------------------------------- 玩家二胜利
+void game_win2() {
+	loadimage(&img_over2, "./images/over2.jpg");
+	putimage(0, 0, &img_over2);
 }
 
 int main()
 {
-	initgraph(WIDTH, HEIGHT,SHOWCONSOLE);//创建窗口
-	MOUSEMSG m;
-	bool flash = true;
-	DWORD last_flash_time = GetTickCount(); 
-	DWORD flash_interval = 300; 
+	initgraph(WIDTH, HEIGHT,SHOWCONSOLE);
 	while (1) {
-		if (GetTickCount() - last_flash_time >= flash_interval) { 
-			last_flash_time = GetTickCount(); 
-			if (flash) {
-				settextstyle(40, 0, _T("宋体")); // 设置文本样式
-				settextcolor(GREEN); // 设置文本颜色
-				outtextxy(395, 265, _T("点击开始游戏")); // 点击开始游戏
-				flash = false;
-			}
-			else {
-				settextstyle(40, 0, _T("宋体")); // 设置文本样式
-				settextcolor(BLACK); // 设置文本颜色
-				outtextxy(395, 265, _T("点击开始游戏")); // 点击开始游戏
-				flash = true;
+		game_begin();
+		game_start();
+		if (winner == -1) game_failure();
+		else if (winner == 0)  game_victory();
+		else if (winner == 1)  game_win1();
+		else if (winner == 2) game_win2();
+		MOUSEMSG m;
+		while (1) {
+			m = GetMouseMsg();
+			if (m.uMsg == WM_LBUTTONDOWN && m.x >= 440 && m.x <= 740 && m.y >= 95 && m.y <= 165) {
+				break;
 			}
 		}
-		m = GetMouseMsg();
-		if (m.uMsg == WM_LBUTTONDOWN&&m.x>=395&&m.x<=600&&m.y>=265&&m.y<=315) {
-			break;
-		}
 	}
-	game_start();
-	if (score >= 20) {
-		game_victory();
-	}
-	else game_over();
 }
