@@ -384,7 +384,7 @@ void game_victory() {
 }
 //--------------------------------------------------------------------------------- 游戏失败
 void game_failure() {
-	loadimage(&img_over_1, "./images/over-1.jpg");
+	loadimage(&img_over_1, "./images/over_1.jpg");
 	putimage(0, 0, &img_over_1);
 }
 //--------------------------------------------------------------------------------- 玩家一胜利
@@ -400,7 +400,7 @@ void game_win2() {
 
 int main()
 {
-	initgraph(WIDTH, HEIGHT,SHOWCONSOLE);
+	initgraph(WIDTH, HEIGHT);
 	while (1) {
 		game_begin();
 		game_start();
