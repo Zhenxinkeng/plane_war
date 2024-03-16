@@ -7,10 +7,6 @@
       "RelativeMoniker": "D:0:0:{3AFC65B8-F413-4B53-BFB8-A688A566C652}|\u98DE\u673A\u5927\u6218.vcxproj|solutionrelative:\u98DE\u673A\u5927\u6218.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3AFC65B8-F413-4B53-BFB8-A688A566C652}|\u98DE\u673A\u5927\u6218.vcxproj|E:\\\u9879\u76EE\\plane_war_test\\\u8D44\u6E90\u52A0\u8F7D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{3AFC65B8-F413-4B53-BFB8-A688A566C652}|\u98DE\u673A\u5927\u6218.vcxproj|solutionrelative:\u8D44\u6E90\u52A0\u8F7D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3AFC65B8-F413-4B53-BFB8-A688A566C652}|\u98DE\u673A\u5927\u6218.vcxproj|E:\\\u9879\u76EE\\plane_war_test\\head.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{3AFC65B8-F413-4B53-BFB8-A688A566C652}|\u98DE\u673A\u5927\u6218.vcxproj|solutionrelative:head.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
@@ -22,24 +18,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "\u8D44\u6E90\u52A0\u8F7D.cpp",
-              "DocumentMoniker": "E:\\\u9879\u76EE\\plane_war_test\\\u8D44\u6E90\u52A0\u8F7D.cpp",
-              "RelativeDocumentMoniker": "\u8D44\u6E90\u52A0\u8F7D.cpp",
-              "ToolTip": "E:\\\u9879\u76EE\\plane_war_test\\\u8D44\u6E90\u52A0\u8F7D.cpp",
-              "RelativeToolTip": "\u8D44\u6E90\u52A0\u8F7D.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-03-15T12:58:51.788Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "head.h",
               "DocumentMoniker": "E:\\\u9879\u76EE\\plane_war_test\\head.h",
               "RelativeDocumentMoniker": "head.h",
@@ -58,7 +41,7 @@
               "RelativeDocumentMoniker": "\u98DE\u673A\u5927\u6218.cpp",
               "ToolTip": "E:\\\u9879\u76EE\\plane_war_test\\\u98DE\u673A\u5927\u6218.cpp",
               "RelativeToolTip": "\u98DE\u673A\u5927\u6218.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAJIBAAAaAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-02-17T10:17:51.475Z",
               "EditorCaption": ""

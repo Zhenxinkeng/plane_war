@@ -21,9 +21,6 @@
     <ClCompile Include="飞机大战.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="资源加载.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="head.h">

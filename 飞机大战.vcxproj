@@ -131,7 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="资源加载.cpp" />
     <ClCompile Include="飞机大战.cpp" />
   </ItemGroup>
   <ItemGroup>

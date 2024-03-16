@@ -318,6 +318,7 @@ void game_draw() {
 void game_begin() {
 	loadimage(&img_menu_bk, "./images/menu_bk.jpg");
 	putimage(0, 0, &img_menu_bk); 
+	PlaySound(TEXT("./music/menu_bk.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	while (1) {
 		MOUSEMSG m;
 		m = GetMouseMsg();
@@ -355,8 +356,10 @@ void game_start() {
 				winner = 0;
 				break;
 			}
-			else if(player1.hp<=0) 
+			else if (player1.hp <= 0) {
+				PlaySound(TEXT("./music/over_1.wav"), NULL, SND_FILENAME | SND_ASYNC);
 				break;
+			}
 		}
 	}
 	else {
@@ -415,5 +418,6 @@ int main()
 				break;
 			}
 		}
+		dataInit();
 	}
 }
